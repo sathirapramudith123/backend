@@ -1,6 +1,6 @@
-# Lanka-Link Backend (Monolithic)
+#  Backend (Monolithic)
 
-A clean monolithic FastAPI backend for **Lanka-Link** using **MongoDB Atlas**.
+
 
 ## Run
 ```bash
