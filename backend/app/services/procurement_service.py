@@ -1,6 +1,8 @@
 from fastapi import HTTPException
+
 from app.models.procurement_model import Procurement
 from app.repositories.procurement_repository import ProcurementRepository
+
 
 class ProcurementService:
     def __init__(self):
