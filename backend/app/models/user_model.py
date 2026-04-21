@@ -1,12 +1,12 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from app.utils.helpers import generate_id, utc_now
 
 class User(BaseModel):
-    id: str = generate_id("usr")
+    id: str = Field(default_factory=lambda: generate_id("usr"))
     full_name: str
     email: EmailStr
     password_hash: str
     role: str = "merchant"
-    created_at: datetime = utc_now()
-    updated_at: datetime = utc_now()
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)

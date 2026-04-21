@@ -1,12 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from app.utils.helpers import generate_id, utc_now
 
 class InventoryItem(BaseModel):
-    id: str = generate_id("inv")
+    id: str = Field(default_factory=lambda: generate_id("inv"))
     name: str
     quantity: float
     unit_price: float
     status: str
-    created_at: datetime = utc_now()
-    updated_at: datetime = utc_now()
+    created_at: datetime = Field(default_factory=utc_now)
+    updated_at: datetime = Field(default_factory=utc_now)
