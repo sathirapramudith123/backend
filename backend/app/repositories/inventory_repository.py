@@ -1,6 +1,14 @@
 from app.core.database import MongoDB
 
 
+def serialize_inventory_item(item: dict) -> dict | None:
+    if not item:
+        return None
+
+    item.pop("_id", None)
+    return item
+
+
 class InventoryItemRepository:
     @property
     def collection(self):
@@ -8,14 +16,14 @@ class InventoryItemRepository:
 
     async def create(self, payload: dict):
         await self.collection.insert_one(payload)
-        return payload
+        return serialize_inventory_item(payload)
 
     async def list_all(self):
         items = []
         async for item in self.collection.find():
-            item["_id"] = str(item.get("_id"))
-            items.append(item)
+            items.append(serialize_inventory_item(item))
         return items
 
     async def get_by_id(self, item_id: str):
-        return await self.collection.find_one({"id": item_id})
+        item = await self.collection.find_one({"id": item_id})
+        return serialize_inventory_item(item)

@@ -1,6 +1,8 @@
 from fastapi import HTTPException
+
 from app.models.inventory_model import InventoryItem
 from app.repositories.inventory_repository import InventoryItemRepository
+
 
 class InventoryItemService:
     def __init__(self):
@@ -16,5 +18,5 @@ class InventoryItemService:
     async def get_by_id(self, item_id: str):
         item = await self.repository.get_by_id(item_id)
         if not item:
-            raise HTTPException(status_code=404, detail="InventoryItem not found")
+            raise HTTPException(status_code=404, detail="Inventory item not found")
         return item

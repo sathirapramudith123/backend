@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
 from datetime import datetime
+from pydantic import BaseModel, Field
+
 from app.utils.helpers import generate_id, utc_now
+
 
 class InventoryItem(BaseModel):
     id: str = Field(default_factory=lambda: generate_id("inv"))
