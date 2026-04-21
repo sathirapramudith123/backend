@@ -1,6 +1,8 @@
 from fastapi import HTTPException
+
 from app.models.supplier_model import Supplier
 from app.repositories.supplier_repository import SupplierRepository
+
 
 class SupplierService:
     def __init__(self):
