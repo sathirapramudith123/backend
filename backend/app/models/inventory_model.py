@@ -7,7 +7,10 @@ from app.utils.helpers import generate_id, utc_now
 class InventoryItem(BaseModel):
     id: str = Field(default_factory=lambda: generate_id("inv"))
     name: str
+    supplier_id: str
+    supplier_name: str
     quantity: float
+    unit: str
     unit_price: float
     status: str
     created_at: datetime = Field(default_factory=utc_now)

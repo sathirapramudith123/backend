@@ -1,6 +1,8 @@
 from fastapi import HTTPException
+
 from app.models.notification_model import Notification
 from app.repositories.notification_repository import NotificationRepository
+
 
 class NotificationService:
     def __init__(self):
