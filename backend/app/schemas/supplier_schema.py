@@ -1,14 +1,33 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+import re
+
+from pydantic import BaseModel, Field, EmailStr, field_validator
+
+
+SRI_LANKAN_MOBILE_PATTERN = r"^(07[01245678][0-9]{7}|\+947[01245678][0-9]{7})$"
 
 
 class SupplierBase(BaseModel):
     name: str = Field(..., min_length=1)
     company_name: str = Field(..., min_length=1)
     contact_number: str = Field(..., min_length=1)
-    email: str = Field(..., min_length=1)
+    email: EmailStr
     address: str = ""
     status: str = Field(..., min_length=1)
+
+    @field_validator("name", "company_name", "contact_number", "address", "status")
+    @classmethod
+    def strip_text(cls, value: str):
+        return value.strip() if isinstance(value, str) else value
+
+    @field_validator("contact_number")
+    @classmethod
+    def validate_contact_number(cls, value: str):
+        if not re.match(SRI_LANKAN_MOBILE_PATTERN, value):
+            raise ValueError(
+                "Invalid Sri Lankan mobile number. Use 0771234567 or +94771234567"
+            )
+        return value
 
 
 class SupplierCreate(SupplierBase):
