@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+
 from app.api.v1.api import api_router
 from app.core.config import settings
 from app.core.database import MongoDB
@@ -14,6 +16,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
+
 register_middleware(app)
 
 
