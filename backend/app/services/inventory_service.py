@@ -10,6 +10,11 @@ class InventoryItemService:
         self.repository = InventoryItemRepository()
         self.supplier_repository = SupplierRepository()
 
+    def get_stock_status(self, quantity: float, reorder_level: float):
+        if quantity <= reorder_level:
+            return "low_stock"
+        return "available"
+
     async def validate_supplier(self, supplier_id: str):
         supplier = await self.supplier_repository.get_by_id(supplier_id)
 
@@ -22,8 +27,21 @@ class InventoryItemService:
         return supplier
 
     async def create(self, data: dict):
+        existing_item = await self.repository.get_by_name(data["name"])
+
+        if existing_item:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Inventory item already exists"
+            )
+
         supplier = await self.validate_supplier(data["supplier_id"])
+
         data["supplier_name"] = supplier["name"]
+        data["status"] = self.get_stock_status(
+            data["quantity"],
+            data["reorder_level"]
+        )
 
         payload = InventoryItem(**data).model_dump()
         return await self.repository.create(payload)
@@ -53,7 +71,12 @@ class InventoryItemService:
             )
 
         supplier = await self.validate_supplier(data["supplier_id"])
+
         data["supplier_name"] = supplier["name"]
+        data["status"] = self.get_stock_status(
+            data["quantity"],
+            data["reorder_level"]
+        )
 
         updated_item = {
             **existing_item,

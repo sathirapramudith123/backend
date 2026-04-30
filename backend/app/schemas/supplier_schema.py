@@ -13,7 +13,11 @@ class SupplierBase(BaseModel):
     contact_number: str = Field(..., min_length=1)
     email: EmailStr
     address: str = ""
-    status: str = Field(..., min_length=1)
+    status: str = "active"
+
+    price_score: float = Field(default=0, ge=0, le=100)
+    reliability_score: float = Field(default=0, ge=0, le=100)
+    delivery_score: float = Field(default=0, ge=0, le=100)
 
     @field_validator("name", "company_name", "contact_number", "address", "status")
     @classmethod
@@ -46,6 +50,12 @@ class SupplierResponse(BaseModel):
     email: str = "N/A"
     address: str = ""
     status: str
+
+    price_score: float = 0
+    reliability_score: float = 0
+    delivery_score: float = 0
+    total_score: float = 0
+
     created_at: datetime
     updated_at: datetime
 
